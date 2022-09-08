@@ -58,7 +58,37 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  
 
+  function playSound(e){
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+    const key =  document.querySelector(`.key[data-key="${e.keyCode}"]`);
+   
+    if(!audio){return;} // we put this so the function will restart, otherwise the funcition will "crash"
+    audio.currentTime = 0; // this will rewind the sound with each hit
+    audio.play();
+    key.classList.add("playing");
+  }
+
+  const keys = document.querySelectorAll(".key");
+    //------------------------------------------------------------------//
+  
+
+  function removeTransition (e)  {
+
+      if(e.propertyName !== "transform")return;  //with this, only the transform one will be taken in account
+      //so "e" will only be that  
+      console.log(e.propertyName); 
+        //console.log(e);
+        //after the transition ended/ the propertyName becomes transform, the class playing is removed
+        //so it can transform again
+      this.classList.remove("playing"); 
+    }
+    
+    // for each key, returns "e" which will be every transitionend event (which in this case are quite a few, but only one is transform )
+    keys.forEach(key => key.addEventListener("transitionend", removeTransition));
+
+    window.addEventListener("keydown",playSound);
 </script>
 
 
